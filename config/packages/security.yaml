@@ -1,0 +1,24 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        api:
+            pattern: ^/api
+            stateless: true
+            http_basic:
+                provider: app_user_provider
+            entry_point: App\Security\ApiKeyAuthenticator
+            logout:
+                path: /api/logout
+                invalidate_session: false
+
+    access_control:
+        - { path: ^/api, roles: ROLE_USER }
